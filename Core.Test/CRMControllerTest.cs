@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Core.Facades;
 using Core.Model;
 using Core.Services;
+using FluentAssertions;
 using NHibernate;
 using NSubstitute;
 using NUnit.Framework;
@@ -51,6 +52,16 @@ namespace Core.Test
             deleteDocuments.Received().Invoke(person);
         }
 
+        [Test]
+        public void Created_person_has_given_name()
+        {
+            const string firstName = "Dirk";
+            const string lastName = "Peters";
+            var sut = new CRMController();
+            sut.CreatePerson(firstName, lastName)
+                .Should()
+                .Match<Person>(p => p.FirstName == firstName && p.LastName == lastName);
+        }
 
     }
 }
