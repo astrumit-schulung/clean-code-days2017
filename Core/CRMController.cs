@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.Data;
+using Core.Facades;
 using Core.Model;
 using Core.Services;
 
@@ -8,13 +9,31 @@ namespace Core
 {
     public class CRMController
     {
+        private readonly IResubmissionService resubmissionService;
+        private readonly IDatabase database;
+        private readonly Action<Person> deleteDocuments;
+
+        public CRMController() : this(new ResubmissionServiceFacade(),
+            ServiceLocator.Instance.GetService<IDatabase>(),
+            DocumentService.DeleteDocuments)
+        {
+        }
+
+        public CRMController(IResubmissionService resubmissionService, 
+            IDatabase database,
+            Action<Person> deleteDocuments)
+        {
+            this.resubmissionService = resubmissionService;
+            this.database = database;
+            this.deleteDocuments = deleteDocuments;
+        }
         public virtual void DeletePerson(Person person)
         {
             Utilities.ThrowIfNull(person, "person");
 
-            ResubmissionService.DeleteResubmissions(person);
-            DocumentService.DeleteDocuments(person);
-            ServiceLocator.Instance.GetService<IDatabase>().CurrentSession.Delete(person);
+            resubmissionService.DeleteResubmissions(person);
+            deleteDocuments(person);
+            database.CurrentSession.Delete(person);
             if (person.CustomFields.ContainsKey("need-notification"))
             {
                 var temp = ServiceLocator.Instance.GetService<ITemplateService>()

@@ -1,0 +1,13 @@
+﻿## DeltePerson_does_not_throw
+
+Lauf 1: Person darf nicht default --> Person initialisert
+Lauf 2: Resubmission Service hat DB Abhaengigkeit --> Resubmissionservice durch Facade ersetzt
+Lauf 3: Document Service benoetigt Person.Documents --> Liste initialisiert
+Lauf 4: Datenbankabhaengigkeit --> IDatabase ueber Dependency Injection
+Lauf 5: Customfields darf nicht null sein --> Customfields initialisiert
+Lauf 6: Gruen
+
+Erkenntnisse:
+- statische Abhaengigkeiten zu anderen Klassen
+- Person wird im CTOR nicht richtig initialisiert
+- DeletePerson verschickt Mails (zuviele Zustaendigkeiten)

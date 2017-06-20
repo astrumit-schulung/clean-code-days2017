@@ -61,6 +61,7 @@
     <Compile Include="Data\AppointmentData.cs" />
     <Compile Include="Data\BinaryFile.cs" />
     <Compile Include="Data\PersonData.cs" />
+    <Compile Include="Facades\ResubmissionServiceFacade.cs" />
     <Compile Include="Model\Appointment.cs" />
     <Compile Include="Model\Communication.cs" />
     <Compile Include="Model\CommunicationType.cs" />
